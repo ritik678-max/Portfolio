@@ -2,9 +2,9 @@
 export const portfolio = {
   name: "Ritik Thakur",
   initials: "RT",
-  role: "QA Engineer & AI Enthusiast",
+  role: "QA Engineer & Backend Developer",
   location: "Birgunj, Nepal",
-  availability: "Open to opportunities",
+  availability: "Open to QA & backend opportunities",
   email: "tritik909@gmail.com",
   phone: "+977-9821821848",
   whatsapp: "https://wa.me/9779821821848?text=Hi%20Ritik%2C%20I%20visited%20your%20portfolio%20and%20would%20like%20to%20connect.",
@@ -12,17 +12,17 @@ export const portfolio = {
   github: "https://github.com/ritik678-max",
   resume: "/NEB_Resume_Ritik.pdf",
   summary:
-    "Computer Science graduate with hands-on experience in software testing, networking, web technologies, and AI-based projects. Skilled in manual testing, SQL, defect tracking, and application quality assurance, with a keen interest in software quality and digital banking systems.",
+    "Computer Science graduate and QA Intern with hands-on experience in manual testing of web and mobile applications, defect reporting, basic API testing, and SQL. Skilled in test case design, regression testing, and using Jira and Postman to support software quality for learning and gaming products. Completed Data Science with Python at TechAxis Nepal and currently learning Playwright to grow in QA automation and backend development. Open to QA and backend developer opportunities.",
   highlights: [
-    { value: "2", label: "Internships" },
-    { value: "2", label: "AI Projects" },
+    { value: "1", label: "Internship" },
+    { value: "3", label: "QA & AI Projects" },
     { value: "5L+", label: "Scholarship applicants" },
   ],
   skills: [
     { group: "Programming", items: ["Python", "Java", "SQL", "C++"] },
     { group: "Testing", items: ["Manual Testing", "Functional Testing", "Regression Testing", "UI Testing", "Test Case Design", "Defect Reporting"] },
-    { group: "Tools", items: ["Jira", "Postman", "GitHub", "VS Code", "Office 365"] },
-    { group: "Knowledge", items: ["MySQL", "SDLC", "STLC", "Defect Life Cycle", "Networking"] },
+    { group: "Tools", items: ["Jira", "Postman", "Swagger", "GitHub", "VS Code", "Office 365"] },
+    { group: "Knowledge", items: ["MySQL", "SQL Queries", "SDLC", "STLC", "Defect Life Cycle", "Networking Fundamentals"] },
   ],
   experience: [
     {
@@ -31,26 +31,26 @@ export const portfolio = {
       location: "Kathmandu, Nepal",
       period: "May 2026 — Present",
       points: [
-        "Test web and mobile applications manually to validate product functionality.",
-        "Write and execute test cases, and report actionable defects using Jira.",
+        "Test web and mobile learning and gaming applications manually to verify functionality and user experience.",
+        "Design and execute test cases based on requirements and report defects using Jira.",
         "Perform basic API testing with Postman and Swagger and verify fixes with developers.",
-      ],
-    },
-    {
-      role: "Network Intern",
-      company: "HiTech Solution and Services Pvt. Ltd.",
-      location: "Remote",
-      period: "May 2024 — Jun 2024",
-      points: [
-        "Assisted in network configuration and connectivity troubleshooting.",
-        "Supported network performance monitoring and optimization.",
-        "Worked with networking infrastructure and connectivity issues.",
+        "Collaborate with product and development teams to improve test coverage and overall application quality.",
       ],
     },
   ],
   projects: [
     {
+      title: "Daraz E-Commerce QA Automation Framework",
+      subtitle: "End-to-End UI & API Testing",
+      visual: "automation",
+      date: "2026",
+      description: "An end-to-end QA automation framework built with Page Object Model. Covers product search, login, guest cart validation, CRUD APIs, and JSON schema validation, with Allure reporting, logging, cross-browser testing, parallel execution, Docker, and GitHub Actions CI.",
+      tech: ["Python", "Playwright", "Pytest", "Requests", "Allure", "Docker", "GitHub Actions"],
+      link: "https://github.com/ritik678-max/daraz-playwright-python-qa",
+    },
+    {
       title: "AeroGuard",
+      visual: "aircraft",
       subtitle: "Aircraft Damage Detection",
       date: "Apr 2025",
       description: "Deep-learning computer vision models that identify aircraft damage, packaged in a clean interactive interface.",
@@ -59,10 +59,11 @@ export const portfolio = {
     },
     {
       title: "Multimodal Sentiment Analysis",
+      visual: "sentiment",
       subtitle: "Text + Visual Intelligence",
       date: "Sep 2024",
       description: "A sentiment prediction system combining textual and visual features through CNN and NLP techniques.",
-      tech: ["Python", "Deep Learning", "CNN", "NLP"],
+      tech: ["Python", "Deep Learning", "OpenCV", "CNN", "NLP"],
       link: "https://github.com/ritik678-max",
     },
   ],
@@ -85,6 +86,13 @@ export const portfolio = {
     { title: "Generative AI: Introduction and Applications", link: "https://drive.google.com/file/d/1KXXlP3jXZi8-clwQRH44KuD401HHJv61/view?usp=drive_link" },
     { title: "Generative AI: Prompt Engineering Basics", link: "https://drive.google.com/file/d/1qQ1FDNINZ07fM1kxLMTOwRJyZ7gq0fHU/view?usp=drive_link" },
   ],
+  course: {
+    title: "Data Science with Python",
+    provider: "TechAxis Nepal",
+    status: "Completed",
+    year: "2026",
+    description: "Python for data analysis, visualization, statistics, and machine learning basics.",
+  },
   achievement: {
     title: "Study in India Scholar",
     text: "Awarded a fully funded undergraduate scholarship by the Government of India after ranking among 500,000+ applicants (2021–2025).",

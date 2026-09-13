@@ -1,97 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { ArrowDown, ArrowUpRight, Award, BriefcaseBusiness, Code2, Download, GraduationCap, MapPin, Menu, Phone, Sparkles, X } from "lucide-react";
+import { ArrowUpRight, ArrowDown, ArrowRight, Download, Menu, X, Check, Code2, Layers, ScanLine, Terminal, BriefcaseBusiness, MapPin, GraduationCap, Award, Plus } from "lucide-react";
 import { portfolio as p } from "./data";
 import "./styles.css";
 
-const nav = ["about", "experience", "projects", "education", "contact"];
-
+const navigation = ["work", "about", "experience", "contact"];
 function Header() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("");
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    addEventListener("scroll", onScroll);
-    return () => removeEventListener("scroll", onScroll);
+    const observer = new IntersectionObserver(entries => entries.forEach(e => {if (e.isIntersecting) setActive(e.target.id);}), {rootMargin: "-20% 0px -55% 0px"});
+    navigation.forEach(id => { const node = document.getElementById(id); if(node) observer.observe(node); });
+    const escape = e => { if(e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", escape);
+    return () => {observer.disconnect(); window.removeEventListener("keydown", escape);};
   }, []);
-  return <header className={scrolled ? "scrolled" : ""}>
-    <a className="logo" href="#top" aria-label="Home"><span>{p.initials}</span><i /></a>
-    <nav className={open ? "open" : ""}>
-      {nav.map((item, i) => <a key={item} href={`#${item}`} onClick={() => setOpen(false)}><small>0{i + 1}</small>{item}</a>)}
-    </nav>
-    <a className="nav-cta" href={p.whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with Ritik on WhatsApp">Let’s talk <ArrowUpRight size={15} /></a>
-    <button className="menu" onClick={() => setOpen(!open)} aria-label="Toggle menu">{open ? <X /> : <Menu />}</button>
-  </header>;
+  return <header className="header"><a href="#top" className="brand" aria-label="Ritik Thakur home">r<span>t</span><i /></a><nav id="navigation" className={open ? "nav open" : "nav"} aria-label="Main navigation">{navigation.map(item => <a key={item} href={`#${item}`} aria-current={active === item ? "location" : undefined} onClick={() => setOpen(false)}>{item === "work" ? "Selected work" : item}</a>)}</nav><a className="header-contact" href={`mailto:${p.email}`}>Let's connect <ArrowUpRight size={16}/></a><button className="menu-toggle" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="navigation" aria-label={open ? "Close menu" : "Open menu"}>{open ? <X/> : <Menu/>}</button></header>;
 }
-
-function SectionTitle({ index, eyebrow, title, text }) {
-  return <div className="section-heading reveal"><div className="section-no">{index}</div><div><p className="eyebrow">{eyebrow}</p><h2>{title}</h2>{text && <p className="section-copy">{text}</p>}</div></div>;
+function Label({number,children}) { return <div className="section-label"><span>{number} /</span>{children}</div>; }
+function Tags({items}) {return <div className="tags">{items.map(item => <span key={item}>{item}</span>)}</div>;}
+function QualityVisual() {
+  const ref = useRef(null);
+  const move = e => {if(window.matchMedia('(prefers-reduced-motion: reduce)').matches || e.pointerType !== 'mouse') return; const r = e.currentTarget.getBoundingClientRect(); ref.current.style.setProperty('--rx', `${-(e.clientY-r.top-r.height/2)/45}deg`); ref.current.style.setProperty('--ry', `${(e.clientX-r.left-r.width/2)/45}deg`);};
+  return <div className="quality-scene" onPointerMove={move} onPointerLeave={() => {ref.current.style.setProperty('--rx','0deg');ref.current.style.setProperty('--ry','0deg');}} aria-hidden="true"><div className="scene-orbit"/><div className="scene-orbit inner"/><div className="quality-window" ref={ref}><div className="window-bar"><div className="window-dots"><i/><i/><i/></div><span>quality.engineer</span><Code2 size={14}/></div><div className="code-block"><p><span className="code-purple">class</span> <span className="code-white">QualityEngineer</span>:</p><p className="indent">name = <span className="code-green">"Ritik Thakur"</span></p><p className="indent">focus = [</p><p className="indent-two code-green">"reliable experiences",</p><p className="indent-two code-green">"thoughtful automation",</p><p className="indent-two code-green">"backend development"</p><p className="indent">]</p><p className="code-comment"># From curiosity to confidence.</p></div><div className="window-bottom"><span><i/> Always exploring</span><span>Python <b className="cursor">_</b></span></div></div><div className="floating-note note-top"><ScanLine size={16}/><span>Detail is the difference.</span></div><div className="floating-note note-bottom"><div className="note-icon"><Check size={18}/></div><div><strong>Quality, by design.</strong><span>Every flow. Every detail.</span></div></div><span className="scene-coordinate">BASED IN NEPAL / BUILDING WITH PURPOSE</span></div>;
 }
-
-function App() {
-  useEffect(() => {
-    const io = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add("visible")), { threshold: .12 });
-    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-  return <>
-    <div className="noise" /><div className="ambient ambient-one" /><div className="ambient ambient-two" />
-    <Header />
-    <main id="top">
-      <section className="hero">
-        <div className="hero-grid" />
-        <div className="hero-copy">
-          <div className="status"><span />{p.availability}</div>
-          <p className="kicker">Hello, I’m</p>
-          <h1>{p.name.split(" ")[0]} <em>{p.name.split(" ")[1]}</em></h1>
-          <div className="role"><span>01</span><strong>{p.role}</strong></div>
-          <p className="intro">I test with precision, build with purpose, and explore intelligent systems that make technology work better.</p>
-          <div className="hero-actions">
-            <a className="button primary" href="#projects">Explore my work <ArrowDown size={17} /></a>
-            <a className="button ghost" href={p.resume} download>Resume <Download size={17} /></a>
-          </div>
-        </div>
-        <div className="orb-wrap" aria-hidden="true"><div className="orbit orbit-a" /><div className="orbit orbit-b" /><div className="orb"><div className="orb-core">RT</div></div><span className="orbit-label l1">QUALITY</span><span className="orbit-label l2">INTELLIGENCE</span><span className="orbit-label l3">SYSTEMS</span></div>
-        <a href="#about" className="scroll-note"><span>Scroll to discover</span><i /></a>
-      </section>
-
-      <section id="about" className="section about">
-        <SectionTitle index="01" eyebrow="About" title="Curious mind. Quality focus." />
-        <div className="about-grid">
-          <div className="about-copy reveal"><p>{p.summary}</p><div className="location"><MapPin size={18} /> Based in {p.location}</div></div>
-          <div className="stats reveal">{p.highlights.map(h => <div className="stat" key={h.label}><strong>{h.value}</strong><span>{h.label}</span></div>)}</div>
-        </div>
-        <div className="skills-grid">{p.skills.map((s, i) => <div className="skill-card reveal" style={{ transitionDelay: `${i * 70}ms` }} key={s.group}><div><Code2 size={18} /><span>0{i+1}</span></div><h3>{s.group}</h3><p>{s.items.join(" · ")}</p></div>)}</div>
-      </section>
-
-      <section id="experience" className="section experience">
-        <SectionTitle index="02" eyebrow="Experience" title="Where I’ve made an impact." />
-        <div className="timeline">{p.experience.map((job, i) => <article className="job reveal" key={job.company}><div className="job-marker"><span>{String(i+1).padStart(2,"0")}</span></div><div className="job-meta"><p>{job.period}</p><span>{job.location}</span></div><div className="job-body"><p className="company">{job.company}</p><h3>{job.role}</h3><ul>{job.points.map(x => <li key={x}>{x}</li>)}</ul></div></article>)}</div>
-      </section>
-
-      <section id="projects" className="section projects">
-        <SectionTitle index="03" eyebrow="Selected work" title="Projects built to solve." text="A selection of applied AI projects—turning models and research into experiences people can use." />
-        <div className="project-grid">{p.projects.map((project, i) => <a className="project-card reveal" href={project.link} target="_blank" rel="noreferrer" key={project.title}><div className="project-top"><span>PROJECT / 0{i+1}</span><ArrowUpRight /></div><div className={`project-visual visual-${i+1}`}>{i === 0 ? <><div className="radar-ring r1"/><div className="radar-ring r2"/><div className="aircraft"><span className="wing left"/><span className="wing right"/><i /></div><div className="damage-target"><b/><span>DAMAGE DETECTED</span></div><div className="scan" /></> : <><div className="sentiment-label positive">POSITIVE</div><div className="sentiment-label neutral">NEUTRAL</div><div className="sentiment-label negative">NEGATIVE</div><div className="wave-bars">{[32,58,42,78,52,90,64,38,72,48,82,55].map((h,n)=><i key={n} style={{"--height":`${h}%`,"--delay":`${n*.08}s`}}/>)}</div><div className="face-pulse"><Sparkles /></div></>}</div><p className="project-date">{project.date}</p><h3>{project.title}</h3><h4>{project.subtitle}</h4><p>{project.description}</p><div className="tags">{project.tech.map(t => <span key={t}>{t}</span>)}</div></a>)}</div>
-      </section>
-
-      <section id="education" className="section education">
-        <SectionTitle index="04" eyebrow="Education & recognition" title="Built on strong foundations." />
-        <div className="education-layout">
-          <div>{p.education.map(e => <article className="edu-card reveal" key={e.school}><GraduationCap /><div><span>{e.period}</span><h3>{e.school}</h3><p>{e.degree}</p><small>{e.location}</small></div></article>)}</div>
-          <a className="achievement reveal" href={p.achievement.link} target="_blank" rel="noreferrer"><Award /><p>Academic achievement</p><h3>{p.achievement.title}</h3><span>{p.achievement.text}</span><b>View recognition <ArrowUpRight size={16}/></b></a>
-        </div>
-        <div className="certs reveal"><p className="eyebrow">Certifications</p>{p.certifications.map(c => <a href={c.link} target="_blank" rel="noreferrer" key={c.title}><span>{c.title}</span><ArrowUpRight size={17}/></a>)}</div>
-      </section>
-
-      <section id="contact" className="contact section">
-        <div className="contact-glow" />
-        <p className="eyebrow reveal">Have a role or project in mind?</p><h2 className="reveal">Let’s build something<br/><em>remarkable.</em></h2>
-        <a className="mail-link reveal" href={`mailto:${p.email}`}>{p.email}<ArrowUpRight /></a>
-        <div className="contact-links reveal"><a href={`tel:${p.phone}`}><Phone size={17}/>{p.phone}</a><a href={p.linkedin} target="_blank" rel="noreferrer"><BriefcaseBusiness size={17}/>LinkedIn</a><a href={p.github} target="_blank" rel="noreferrer"><Code2 size={17}/>GitHub</a></div>
-      </section>
-    </main>
-    <footer><span>© {new Date().getFullYear()} {p.name}</span><p>Designed with intention. Built with React.</p><a href="#top">Back to top ↑</a></footer>
-  </>;
+function AutomationVisual(){return <div className="automation-art" aria-hidden="true"><div className="art-top"><span><Terminal size={14}/> daraz / automation</span><span className="tiny-pill">FRAMEWORK</span></div><div className="pipeline"><div><Code2/><span>UI tests</span><small>Playwright</small></div><i/><div><Layers/><span>API tests</span><small>Requests</small></div><i/><div><Check/><span>Reporting</span><small>Allure</small></div></div><div className="art-code"><span>01</span><code>def test_product_search():</code><span>02</span><code>&nbsp;&nbsp;search.search_for("headphones")</code><span>03</span><code>&nbsp;&nbsp;assert results.are_relevant()</code></div><div className="art-bottom"><span><i/> Page Object Model</span><span>Docker + GitHub Actions</span></div></div>;}
+function AircraftVisual(){return <div className="aircraft-art" aria-hidden="true"><div className="radar-circle"/><div className="radar-circle two"/><svg viewBox="0 0 400 220"><path d="M200 28 C207 28 210 43 210 64 L214 95 L321 151 L321 165 L211 137 L207 177 L232 193 L232 202 L200 193 L168 202 L168 193 L193 177 L189 137 L79 165 L79 151 L186 95 L190 64 C190 43 193 28 200 28Z" fill="rgba(156,177,203,.12)" stroke="#7f99b7" strokeWidth="1.2"/><path d="M200 40V182 M103 150L191 115 M297 150L209 115" fill="none" stroke="#4d637e" strokeDasharray="3 4"/><rect x="242" y="121" width="39" height="30" rx="2" fill="rgba(196,241,112,.08)" stroke="#c4f170"/><path d="M281 126L309 98H348" fill="none" stroke="#c4f170"/><text x="295" y="90" fill="#c4f170" fontSize="8" fontFamily="monospace">DETECTION</text></svg><div className="scan-line"/><span className="visual-caption">COMPUTER VISION / CONCEPT VISUAL</span></div>;}
+function SentimentVisual(){return <div className="sentiment-art" aria-hidden="true"><div className="sentiment-input"><span>Text</span><Plus size={13}/><span>Visual</span></div><div className="audio-bars">{[25,48,32,63,86,52,100,69,44,77,56,93,66,39,59,28,47,22].map((h,i)=><i key={i} style={{'--h':`${h}%`,'--delay':`${i*.11}s`}}/>)}</div><div className="sentiment-output"><span>CNN</span><i/><span>Feature fusion</span><i/><span>NLP</span></div><span className="visual-caption">MULTIMODAL INTELLIGENCE</span></div>;}
+function App(){
+  useEffect(()=>{const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));return()=>observer.disconnect();},[]);
+  return <><a className="skip-link" href="#work">Skip to work</a><Header/><main id="top"><section className="hero wrap"><div className="hero-copy"><div className="availability"><i/>{p.availability}</div><p className="hero-intro">HELLO, I'M RITIK THAKUR</p><h1>Good software.<br/><span>Greater</span><br/><em>confidence.</em></h1><p className="hero-description">{p.role}. I build reliable software and test the details that make it better.</p><div className="hero-actions"><a className="button primary" href="#work">Explore my work <ArrowUpRight size={18}/></a><a className="button secondary" href={p.resume} download>Download CV <Download size={16}/></a></div><div className="hero-location"><MapPin size={13}/>{p.location}<span> / </span>Open to QA &amp; backend roles</div></div><QualityVisual/><div className="hero-bottom"><span>HUMAN CURIOSITY. ENGINEERING PRECISION.</span><a href="#work">SCROLL TO EXPLORE <ArrowDown size={13}/></a></div></section>
+  <div className="expertise-strip"><div className="wrap">{['QA automation','Backend development','API testing','Applied AI'].map((s,i)=><React.Fragment key={s}><span>{s}</span>{i<3&&<Plus size={14}/>}</React.Fragment>)}</div></div>
+  <section id="work" className="section wrap"><div className="section-heading reveal"><div><Label number="01">SELECTED WORK</Label><h2>Built with purpose.<br/><span>Tested with intent.</span></h2></div><p>A closer look at my work across software quality, automation, and applied intelligence.</p></div>
+  <article className="featured-project reveal"><div className="featured-copy"><div className="project-meta"><span className="accent">FEATURED PROJECT</span><span>2026</span></div><h3>Confidence at<br/>every checkout.</h3><p className="project-name">Daraz E-Commerce QA Automation Framework</p><p className="project-description">{p.projects[0].description}</p><Tags items={p.projects[0].tech}/><a className="text-link" href={p.projects[0].link} target="_blank" rel="noreferrer">Explore the repository <ArrowUpRight size={17}/></a></div><AutomationVisual/></article>
+  <div className="project-grid">{p.projects.slice(1).map((project,i)=><article className="project-card reveal" key={project.title}>{i===0?<AircraftVisual/>:<SentimentVisual/>}<div className="project-card-copy"><div className="project-meta"><span>{i===0?'COMPUTER VISION':'DEEP LEARNING'}</span><span>{project.date}</span></div><h3>{project.title}</h3><p className="project-subtitle">{project.subtitle}</p><p className="project-description">{project.description}</p><Tags items={project.tech}/><a className="text-link" href={project.link} target="_blank" rel="noreferrer">{i===0?'View live project':'Visit GitHub profile'}<ArrowUpRight size={17}/></a></div></article>)}</div></section>
+  <section id="about" className="about-section"><div className="wrap section"><div className="about-layout"><div className="reveal"><Label number="02">THE PERSON BEHIND THE WORK</Label><h2>Curiosity drives me.<br/><span>Quality grounds me.</span></h2><div className="about-signature">Ritik Thakur<span>{p.role.toUpperCase()}</span></div></div><div className="about-copy reveal"><p>{p.summary}</p><div className="about-facts"><div><strong>03</strong><span>QA & AI projects</span></div><div><strong>01</strong><span>QA internship</span></div><div><GraduationCap size={30}/><span>Computer Science graduate</span></div></div></div></div><div className="skills-heading reveal"><span>MY TOOLKIT</span><p>The tools change. The attention to detail stays.</p></div><div className="skills-grid">{p.skills.map((s,i)=><div className="skill-card reveal" key={s.group}><span className="skill-number">0{i+1}</span><h3>{s.group}</h3><Tags items={s.items}/></div>)}</div></div></section>
+  <section id="experience" className="section wrap"><div className="section-heading reveal"><div><Label number="03">EXPERIENCE</Label><h2>Learning by doing.<br/><span>Improving by testing.</span></h2></div><p>Working alongside product and development teams to make everyday experiences more reliable.</p></div>{p.experience.map(job=><article className="experience-card reveal" key={job.company}><div className="experience-meta"><span className="current-badge"><i/>CURRENT ROLE</span><p>{job.period}</p><span>{job.location}</span></div><div className="experience-content"><h3>{job.role}</h3><p className="company">{job.company}</p><ul>{job.points.map(point=><li key={point}><ArrowRight size={14}/><span>{point}</span></li>)}</ul></div></article>)}</section>
+  <section className="education-section"><div className="section wrap"><div className="section-heading reveal"><div><Label number="04">FOUNDATIONS & GROWTH</Label><h2>Always a student.<br/><span>Always moving forward.</span></h2></div></div><div className="education-grid"><div className="education-list">{p.education.map(e=><article className="education-card reveal" key={e.school}><GraduationCap size={23}/><div><span className="mono muted">{e.period}</span><h3>{e.school}</h3><p>{e.degree}</p><small>{e.location}</small></div></article>)}</div><a className="scholarship reveal" href={p.achievement.link} target="_blank" rel="noreferrer"><div><Award size={25}/><ArrowUpRight size={20}/></div><span className="mono">ACADEMIC RECOGNITION</span><h3>{p.achievement.title}</h3><p>{p.achievement.text}</p><span className="text-link">View recognition <ArrowUpRight size={15}/></span></a></div><article className="learning-card reveal"><div className="learning-icon"><Layers size={24}/></div><div><span className="mono accent">COURSE COMPLETED / {p.course.year}</span><h3>{p.course.title} <span>at {p.course.provider}</span></h3><p>{p.course.description}</p></div><span className="learning-status"><Check size={13}/>{p.course.status.toUpperCase()}</span></article><div className="certificates reveal"><h3>Certifications</h3>{p.certifications.map((c,i)=><a href={c.link} target="_blank" rel="noreferrer" key={c.title}><span className="mono muted">0{i+1}</span><span>{c.title}</span><ArrowUpRight size={18}/></a>)}</div></div></section>
+  <section id="contact" className="contact-section wrap"><div className="contact-top reveal"><Label number="05">LET'S CONNECT</Label><span className="availability"><i/>{p.availability}</span></div><h2 className="reveal">Your next great product<br/>deserves <em>great quality.</em></h2><div className="contact-bottom reveal"><div><p>Have a role, an idea, or a challenge in mind?<br/>I'd love to hear about it.</p><a className="email-link" href={`mailto:${p.email}`}>{p.email}<ArrowUpRight size={25}/></a></div><a className="contact-circle" href={p.whatsapp} target="_blank" rel="noreferrer" aria-label="Let's talk on WhatsApp"><ArrowUpRight size={32}/><span>LET'S TALK</span></a></div><div className="social-row"><a href={p.linkedin} target="_blank" rel="noreferrer"><BriefcaseBusiness size={15}/>LinkedIn<ArrowUpRight size={13}/></a><a href={p.github} target="_blank" rel="noreferrer"><Code2 size={15}/>GitHub<ArrowUpRight size={13}/></a><a href={`tel:${p.phone}`}>{p.phone}<ArrowUpRight size={13}/></a></div></section></main><footer className="wrap"><span>&copy; {new Date().getFullYear()} {p.name}</span><span>Crafted with care. Built with React.</span><a href="#top">Back to top <ArrowUpRight size={13}/></a></footer></>;
 }
-
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(<App/>);
