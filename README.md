@@ -22,9 +22,9 @@ Deploy the generated `dist/` directory to a static hosting service. Optionally r
 
 ## CI/CD
 
-GitHub Actions installs dependencies and builds the site for every pull request and push to `main`. Successful pushes to `main` are deployed automatically to GitHub Pages.
+GitHub Actions installs dependencies and verifies the production build for every pull request and push to `main`. The workflow can also be run manually from the **Actions** tab.
 
-In the repository's **Settings > Pages**, set **Source** to **GitHub Actions**. You can also run the workflow manually from the **Actions** tab.
+The live site is hosted on Vercel at [myportfolio-virid-omega-29.vercel.app](https://myportfolio-virid-omega-29.vercel.app/). Vercel handles deployment separately through its GitHub integration.
 
 ## Update content
 
