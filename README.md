@@ -20,6 +20,12 @@ npm.cmd run preview
 
 Deploy the generated `dist/` directory to a static hosting service. Optionally run `python server.py` after building to serve the site locally on port 8000.
 
+## CI/CD
+
+GitHub Actions installs dependencies and builds the site for every pull request and push to `main`. Successful pushes to `main` are deployed automatically to GitHub Pages.
+
+In the repository's **Settings > Pages**, set **Source** to **GitHub Actions**. You can also run the workflow manually from the **Actions** tab.
+
 ## Update content
 
 - `src/data.js`: profile, experience, projects, education, and course status.
